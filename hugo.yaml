@@ -1,0 +1,9 @@
+baseURL: 'https://victordgrandis.github.io/blog/'
+languageCode: 'en-us'
+title: 'Victor De Grandis Site'
+theme: 'PaperMod'
+
+services:
+  googleAnalytics:
+    ID: 'G-G0JRFKHW77'
+
