@@ -1,5 +1,9 @@
 baseURL = 'https://victordgrandis.github.io/blog/'
 languageCode = 'en-us'
-title = 'Victor De Grandis Blog'
-theme = 'ananke'
-googleAnalytics = 'G-G0JRFKHW77'
+title = 'Victor De Grandis Site'
+theme = 'PaperMod'
+
+[services]
+  [services.googleAnalytics]
+    ID = 'G-G0JRFKHW77'
+

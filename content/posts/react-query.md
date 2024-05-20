@@ -1,7 +1,7 @@
 +++
 title = 'React Query'
 date = 2024-05-18T13:04:27-03:00
-draft = true
+draft = false
 +++
 ## How to use React Query on Nextjs
 
@@ -41,7 +41,7 @@ export default function App({Component, pageProps}) {
 }
 ```
 
-If you don't know what a provider is, visit [the react docs](https://reactjs.org/docs/context.html).
+If you don't know what a provider is, visit [the React docs](https://reactjs.org/docs/context.html).
 
 Secondly, you have to make a service, for example at `/lib/services/getClientsService.ts`
 
@@ -75,7 +75,7 @@ export function useClients() {
 
 ```
 
-Now you're good to go using the hook in every component necessary, like so:
+Now you're good to go, using the hook in every component necessary, like so:
 
 ``` typescript
 
@@ -98,3 +98,7 @@ export default function Clients() {
 }
 
 ```
+
+### Conclusion
+
+Using react-query is pretty straight forward and simple, and the benefits on performance are considerable, so it's a very useful tool to have in every React project.
