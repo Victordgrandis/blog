@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=blog/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>How to parallelize Webpack Loaders | Victor De Grandis Site</title>
+<meta name="keywords" content="">
+<meta name="description" content="Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.
+My aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.
+Motivation Working with a very big project built on angularjs (a monolithic with 5&#43; products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7&rsquo; only for webpack tasks.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/blog/posts/webpack-loaders/">
+<link crossorigin="anonymous" href="/blog/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/blog/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/blog/posts/webpack-loaders/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-G0JRFKHW77"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-G0JRFKHW77');
+        }
+      </script>
+    
+  
+
+<meta property="og:title" content="How to parallelize Webpack Loaders" />
+<meta property="og:description" content="Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.
+My aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.
+Motivation Working with a very big project built on angularjs (a monolithic with 5&#43; products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7&rsquo; only for webpack tasks." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/blog/posts/webpack-loaders/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-05-18T16:35:24-03:00" />
+<meta property="article:modified_time" content="2024-05-18T16:35:24-03:00" /><meta property="og:site_name" content="Victor De Grandis Site" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to parallelize Webpack Loaders"/>
+<meta name="twitter:description" content="Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.
+My aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.
+Motivation Working with a very big project built on angularjs (a monolithic with 5&#43; products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7&rsquo; only for webpack tasks."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "How to parallelize Webpack Loaders",
+      "item": "http://localhost:1313/blog/posts/webpack-loaders/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How to parallelize Webpack Loaders",
+  "name": "How to parallelize Webpack Loaders",
+  "description": "Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.\nMy aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.\nMotivation Working with a very big project built on angularjs (a monolithic with 5+ products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7\u0026rsquo; only for webpack tasks.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.\nMy aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.\nMotivation Working with a very big project built on angularjs (a monolithic with 5+ products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7’ only for webpack tasks. So i decided to parallelize the most heavy loaders (like typescript and html) and reduce the struggle of the team and the cost of the builds.\nTools For the speed check of webpack work, i used, and highly recomend SMP. With this package you only need to wrap your webpack object and it messures the times it takes for each loader to finish. For the parallelization i used HappyPack. Which allows to set certain number of threads for every loader to work. So each loader can transcript the\nOriginal webpack config The following configuration for webpack rules worked ok, did the job, but with such a big amount of files it took so long to finish. Here we have js, ts, css, html, scss, icons and image types to be packaged by webpack (js and ts are separated because of the necessity of using the plugin “angularjs-annotate” for production):\nmodule.exports = smp.wrap({ [...], module: { rules: [{ test: /\\.ts?$/, use: [ { loader: 'babel-loader?cacheDirectory', options: { plugins: [\"angularjs-annotate\", \"syntax-dynamic-import\"] } }, { loader: 'ts-loader' } ] }, { test: /\\.html?$/, loader: 'html-loader' }, { test: /\\.css$/, use: [ 'style-loader', 'css-loader' ] }, { test: /\\.scss$/, use: [{ loader: \"style-loader\" }, { loader: \"css-loader\" }, { loader: \"sass-loader\" }] }, { test: /\\.(woff|woff2|eot|ttf)$/, loader: 'url-loader?limit=100000' }, { test: /\\.(png|jpg|gif|svg|json|xml|ico)$/, loader: 'file-loader' }, { test: /\\.js$/, exclude: /(node_modules)/, use: { loader: 'babel-loader?cacheDirectory', options: { presets: [['es2015', { \"targets\": \"\u003e 0.25%\", \"useBuiltIns\": \"usage\" }]], } } }] } }) Measured with smp it showed that the most expensive loader was ts-loader (almost 7 minutes), having to manage a lot of files from the project. So is the first to work with.\nParallelizing So incorporating HappyPack to webpack is very straight forward, first you have to include a HappyPack instance with the plugins:\nplugins: [ new HappyPack({ id: 'ts', threads: 2, loaders: [ { path: 'ts-loader', query: { happyPackMode: true } } ] }), new HappyPack({ id: 'babel-ts', threads: 2, loaders: [{ path: 'babel-loader', happyPackMode: true, query: { plugins: [\"angularjs-annotate\", \"syntax-dynamic-import\"], cacheDirectory: true } }] }) ] Here we have an id property that will bind the plugin instance with the correspondent rule, the number of threads wanted, and the loaders to be parallelized. I only used 2 threads for each instance because testing it it didn’t change the performance when i incremented the number of threads. Here i have 2 instances of HappyPack because i wanted to parallelize both loaders in my ts rule, one for ts-loader, and one for babel-loader (needed for the angularjs-annotate and dynamic imports in production). After we define our plugin called ’ts’, we have to modify the rule:\n{ test: /\\.ts?$/, use: [ { loader: 'happypack/loader?id=babel-ts' }, { loader: 'happypack/loader?id=ts' } ] }, So now, when webpack wants to work with the rule correspondent to the .ts file type, it will be looking for an HappyPack instance with the passed id, and run it according to its configuration.\nResults Parallelizing the ts-loader, the time it took to run accordingly to SMP changed from 7 minutes, to only 30 seconds. Which is a very significant proportion. The costs of building the app reduced a lot, and (most important) the development team was very pleased with the less time waiting for each run. This same work with the ts-loader was replicated also in other loaders, as the html-loader. With loaders that doesn’t parse too many files it doesn’t make such difference and can be a waste of time, so the rest remains on a single thread. Also it has to be said HappyPack doesn’t work with all webpack loaders as some loader API are not supported.\nConclusion Using this very simple and very straight forward tool you can reduce significatly the times of you webpack tasks and benefit the budgets and the dev team.\n",
+  "wordCount" : "722",
+  "inLanguage": "en",
+  "datePublished": "2024-05-18T16:35:24-03:00",
+  "dateModified": "2024-05-18T16:35:24-03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/blog/posts/webpack-loaders/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Victor De Grandis Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/blog/" accesskey="h" title="Victor De Grandis Site (Alt + H)">Victor De Grandis Site</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      How to parallelize Webpack Loaders
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+    </h1>
+    <div class="post-meta"><span title='2024-05-18 16:35:24 -0300 -03'>May 18, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.</p>
+<p>My aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.</p>
+<h2 id="motivation">Motivation<a hidden class="anchor" aria-hidden="true" href="#motivation">#</a></h2>
+<p>Working with a very big project built on angularjs (a monolithic with 5+ products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7&rsquo; only for webpack tasks.
+So i decided to parallelize the most heavy loaders (like typescript and html) and reduce the struggle of the team and the cost of the builds.</p>
+<h2 id="tools">Tools<a hidden class="anchor" aria-hidden="true" href="#tools">#</a></h2>
+<p>For the speed check of webpack work, i used, and highly recomend <a href="https://github.com/stephencookdev/speed-measure-webpack-plugin">SMP</a>. With this package you only need to wrap your webpack object and it messures the times it takes for each loader to finish.
+For the parallelization i used <a href="https://github.com/amireh/happypack">HappyPack</a>. Which allows to set certain number of threads for every loader to work.
+So each loader can transcript the</p>
+<h2 id="original-webpack-config">Original webpack config<a hidden class="anchor" aria-hidden="true" href="#original-webpack-config">#</a></h2>
+<p>The following configuration for webpack rules worked ok, did the job, but with such a big amount of files it took so long to finish.
+Here we have js, ts, css, html, scss, icons and image types to be packaged by webpack (js and ts are separated because of the necessity of using the plugin &ldquo;angularjs-annotate&rdquo; for production):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">wrap</span>({
+</span></span><span style="display:flex;"><span>    [...],
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">module</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">rules</span><span style="color:#f92672">:</span> [{
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.ts?$/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;babel-loader?cacheDirectory&#39;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> {  
+</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">plugins</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;angularjs-annotate&#34;</span>, <span style="color:#e6db74">&#34;syntax-dynamic-import&#34;</span>] 
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                },
+</span></span><span style="display:flex;"><span>                { <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ts-loader&#39;</span> } 
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.html?$/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;html-loader&#39;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.css$/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#39;style-loader&#39;</span>, <span style="color:#e6db74">&#39;css-loader&#39;</span> ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        { 
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.scss$/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [{ <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;style-loader&#34;</span>  }, { <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;css-loader&#34;</span> }, { <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;sass-loader&#34;</span> }]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        { 
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.(woff|woff2|eot|ttf)$/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;url-loader?limit=100000&#39;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        { 
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.(png|jpg|gif|svg|json|xml|ico)$/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;file-loader&#39;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        { 
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.js$/</span>, 
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">exclude</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/(node_modules)/</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;babel-loader?cacheDirectory&#39;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">options</span><span style="color:#f92672">:</span> { 
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">presets</span><span style="color:#f92672">:</span> [[<span style="color:#e6db74">&#39;es2015&#39;</span>, {
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;targets&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;&gt; 0.25%&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;useBuiltIns&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;usage&#34;</span>
+</span></span><span style="display:flex;"><span>                    }]],  
+</span></span><span style="display:flex;"><span>                } 
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>Measured with smp it showed that the most expensive loader was ts-loader (almost 7 minutes), having to manage a lot of files from the project. So is the first to work with.</p>
+<h2 id="parallelizing">Parallelizing<a hidden class="anchor" aria-hidden="true" href="#parallelizing">#</a></h2>
+<p>So incorporating HappyPack to webpack is very straight forward, first you have to include a HappyPack instance with the plugins:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">plugins</span><span style="color:#f92672">:</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">HappyPack</span>({
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ts&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">threads</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">loaders</span><span style="color:#f92672">:</span> [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ts-loader&#39;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">query</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">happyPackMode</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>    }),
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">HappyPack</span>({
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;babel-ts&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">threads</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">loaders</span><span style="color:#f92672">:</span> [{
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;babel-loader&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">happyPackMode</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">query</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">plugins</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;angularjs-annotate&#34;</span>, <span style="color:#e6db74">&#34;syntax-dynamic-import&#34;</span>],
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">cacheDirectory</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }]
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><p>Here we have an <em>id</em> property that will bind the plugin instance with the correspondent rule, the number of threads wanted, and the loaders to be parallelized. I only used 2 threads for each instance because testing it it didn&rsquo;t change the performance when i incremented the number of threads.
+Here i have 2 instances of HappyPack because i wanted to parallelize both loaders in my <em>ts</em> rule, one for ts-loader, and one for babel-loader (needed for the angularjs-annotate and dynamic imports in production).
+After we define our plugin called &rsquo;ts&rsquo;, we have to modify the rule:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.ts?$/</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [
+</span></span><span style="display:flex;"><span>		{ <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;happypack/loader?id=babel-ts&#39;</span> },
+</span></span><span style="display:flex;"><span>		{ <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;happypack/loader?id=ts&#39;</span> }
+</span></span><span style="display:flex;"><span>	]
+</span></span><span style="display:flex;"><span>},
+</span></span></code></pre></div><p>So now, when webpack wants to work with the rule correspondent to the <em>.ts</em> file type, it will be looking for an HappyPack instance with the passed id, and run it according to its configuration.</p>
+<h2 id="results">Results<a hidden class="anchor" aria-hidden="true" href="#results">#</a></h2>
+<p>Parallelizing the <code>ts-loader</code>, the time it took to run accordingly to SMP changed from 7 minutes, to only 30 seconds. Which is a very significant proportion.
+The costs of building the app reduced a lot, and (most important) the development team was very pleased with the less time waiting for each run.
+This same work with the <code>ts-loader</code> was replicated also in other loaders, as  the html-loader.
+With loaders that doesn&rsquo;t parse too many files it doesn&rsquo;t make such difference and can be a waste of time, so the rest remains on a single thread.
+Also it has to be said HappyPack doesn&rsquo;t work with all webpack loaders as some loader API are not supported.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>Using this very simple and very straight forward tool you can reduce significatly the times of you webpack tasks and benefit the budgets and the dev team.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://localhost:1313/blog/">Victor De Grandis Site</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

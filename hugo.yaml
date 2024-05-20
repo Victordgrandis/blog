@@ -7,3 +7,6 @@ services:
   googleAnalytics:
     ID: 'G-G0JRFKHW77'
 
+params:
+  env: 'production'
+  title: 'Victor De Grandis Site'

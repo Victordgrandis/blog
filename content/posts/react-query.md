@@ -1,9 +1,8 @@
 +++
-title = 'React Query'
-date = 2024-05-18T13:04:27-03:00
+title = 'How to use React Query on Nextjs'
+date = 2024-05-20T13:04:27-03:00
 draft = false
 +++
-## How to use React Query on Nextjs
 
 React query is a tool for creating hooks for fetching, caching and updating asynchronous data [repository](https://github.com/TanStack/query).
 

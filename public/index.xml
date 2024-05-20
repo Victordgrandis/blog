@@ -2,19 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Victor De Grandis Site</title>
-    <link>https://victordgrandis.github.io/blog/</link>
+    <link>http://localhost:1313/blog/</link>
     <description>Recent content on Victor De Grandis Site</description>
     <generator>Hugo -- 0.126.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 May 2024 13:04:27 -0300</lastBuildDate>
-    <atom:link href="https://victordgrandis.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 May 2024 13:04:27 -0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>React Query</title>
-      <link>https://victordgrandis.github.io/blog/posts/react-query/</link>
-      <pubDate>Sat, 18 May 2024 13:04:27 -0300</pubDate>
-      <guid>https://victordgrandis.github.io/blog/posts/react-query/</guid>
-      <description>How to use React Query on Nextjs React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.
+      <title>How to use React Query on Nextjs</title>
+      <link>http://localhost:1313/blog/posts/react-query/</link>
+      <pubDate>Mon, 20 May 2024 13:04:27 -0300</pubDate>
+      <guid>http://localhost:1313/blog/posts/react-query/</guid>
+      <description>React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.
 Motivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it&amp;rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it.</description>
+    </item>
+    <item>
+      <title>How to use Hotjar JavaScript triggers on Angular</title>
+      <link>http://localhost:1313/blog/posts/hotjar-angular/</link>
+      <pubDate>Sun, 19 May 2024 16:42:23 -0300</pubDate>
+      <guid>http://localhost:1313/blog/posts/hotjar-angular/</guid>
+      <description>JavaScript triggers are the most useful feature for using Hotjar HeatMaps in one page applications, because without that you can&amp;rsquo;t create HeatMaps on dynamic content or modals, dropdowns, etc. So i will show you how i made it work on an Angular project. I&amp;rsquo;m making the assumption that you already have an Hotjar account and initialize a project.
+Include Hotjar in your project First we need to include the tracking code in our index.</description>
+    </item>
+    <item>
+      <title>How to parallelize Webpack Loaders</title>
+      <link>http://localhost:1313/blog/posts/webpack-loaders/</link>
+      <pubDate>Sat, 18 May 2024 16:35:24 -0300</pubDate>
+      <guid>http://localhost:1313/blog/posts/webpack-loaders/</guid>
+      <description>Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.
+My aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.
+Motivation Working with a very big project built on angularjs (a monolithic with 5+ products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7&amp;rsquo; only for webpack tasks.</description>
     </item>
   </channel>
 </rss>
