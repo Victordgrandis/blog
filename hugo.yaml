@@ -10,3 +10,11 @@ services:
 params:
   env: 'production'
   title: 'Victor De Grandis Site'
+  
+  socialIcons:
+  - name: "linkedin"
+    url: "https://www.linkedin.com/in/victor-de-grandis-0a1202ab/"
+  - name: "x"
+    url: "https://x.com"
+
+  ShowShareButtons: true
