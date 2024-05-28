@@ -10,11 +10,11 @@ services:
 params:
   env: 'production'
   title: 'Victor De Grandis Site'
-  
+
+  homeInfoParams:
+    Title: Hi there 
+    Content: I am a software developer willing to share some of the challenges I encounter in my day to day work as a Freelancer, so maybe you can find something useful for you.
+
   socialIcons:
   - name: "linkedin"
     url: "https://www.linkedin.com/in/victor-de-grandis-0a1202ab/"
-  - name: "x"
-    url: "https://x.com"
-
-  ShowShareButtons: true
