@@ -2,23 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/blog/posts/react-query/</loc>
+    <loc>https://victordgrandis.github.io/blog/posts/pdf-kotlin/</loc>
+    <lastmod>2024-05-28T13:00:23-03:00</lastmod>
+  </url><url>
+    <loc>https://victordgrandis.github.io/blog/posts/</loc>
+    <lastmod>2024-05-28T13:00:23-03:00</lastmod>
+  </url><url>
+    <loc>https://victordgrandis.github.io/blog/</loc>
+    <lastmod>2024-05-28T13:00:23-03:00</lastmod>
+  </url><url>
+    <loc>https://victordgrandis.github.io/blog/posts/react-query/</loc>
     <lastmod>2024-05-20T13:04:27-03:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/posts/</loc>
-    <lastmod>2024-05-20T13:04:27-03:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/blog/</loc>
-    <lastmod>2024-05-20T13:04:27-03:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/blog/posts/hotjar-angular/</loc>
+    <loc>https://victordgrandis.github.io/blog/posts/hotjar-angular/</loc>
     <lastmod>2024-05-19T16:42:23-03:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/posts/webpack-loaders/</loc>
+    <loc>https://victordgrandis.github.io/blog/posts/webpack-loaders/</loc>
     <lastmod>2024-05-18T16:35:24-03:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/categories/</loc>
+    <loc>https://victordgrandis.github.io/blog/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/blog/tags/</loc>
+    <loc>https://victordgrandis.github.io/blog/tags/</loc>
   </url>
 </urlset>
