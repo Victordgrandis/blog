@@ -4,18 +4,16 @@
     <title>Victor De Grandis Site</title>
     <link>https://victordgrandis.github.io/blog/</link>
     <description>Recent content on Victor De Grandis Site</description>
-    <generator>Hugo -- 0.126.1</generator>
+    <generator>Hugo -- 0.126.3</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 28 May 2024 13:00:23 -0300</lastBuildDate>
     <atom:link href="https://victordgrandis.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>How to share a table as PDF using Kotlin and iText 5</title>
+      <title>Creating Shareable PDF Reports with Kotlin and iText from RecyclerView Data</title>
       <link>https://victordgrandis.github.io/blog/posts/pdf-kotlin/</link>
       <pubDate>Tue, 28 May 2024 13:00:23 -0300</pubDate>
       <guid>https://victordgrandis.github.io/blog/posts/pdf-kotlin/</guid>
-      <description>Motivation The main motivation for this post is to automate the process of creating and sharing reports when you have an android view with a table made of a RecyclerView showing many columns, and you want to share using a A4 page space properly.
-Packages For this feature, we will be using iText v5.5.10 and Kotlin v1.8.0.
-Usage Firstly, we are going to create a class for managing the PDF file and a generic creation of headers and cells for the table using iText tools:</description>
+      <description>Motivation Tables are a cornerstone of data presentation in mobile apps. Android&amp;rsquo;s RecyclerView makes it easy to create dynamic tables with large datasets. However, exporting this data to a PDF or other file format for sharing can be challenging. This post will address this challenge by showing you how to leverage Kotlin and iText to automate the creation and sharing of reports from your RecyclerView data, ensuring proper formatting for A4 pages.</description>
     </item>
     <item>
       <title>How to use React Query on Nextjs</title>

@@ -1,16 +1,25 @@
 +++
-title = 'How to share a table as PDF using Kotlin and iText 5'
+title = 'Creating Shareable PDF Reports with Kotlin and iText from RecyclerView Data'
 date = 2024-05-28T13:00:23-03:00
 draft = false
 +++
 
 ## Motivation
 
-The main motivation for this post is to automate the process of creating and sharing reports when you have an android view with a table made of a RecyclerView showing many columns, and you want to share using a A4 page space properly.
+Tables are a cornerstone of data presentation in mobile apps. Android's RecyclerView makes it easy to create dynamic tables with large datasets. However, exporting this data to a PDF or other file format for sharing can be challenging.
+This post will address this challenge by showing you how to leverage Kotlin and iText to automate the creation and sharing of reports from your RecyclerView data, ensuring proper formatting for A4 pages.
 
 ## Packages
 
 For this feature, we will be using iText v5.5.10 and Kotlin v1.8.0.
+
+You can add iText dependency on your project's `build.gradle` file:
+
+```kotlin
+dependencies {
+    implementation 'com.itextpdf:itextg:5.5.10'
+}
+```
 
 ## Usage
 
@@ -18,7 +27,10 @@ Firstly, we are going to create a class for managing the PDF file and a generic 
 
 ```kotlin
 open class PdfGenerator {
-
+  /**
+   * Creates a PdfPCell for the table header with specified content, height,
+   * and optional border widths.
+   */
   fun createHeaderCell(
     content: String?,
     height: Float,
@@ -36,6 +48,10 @@ open class PdfGenerator {
     return cell
   }
 
+  /** 
+   * Creates a PdfPCell for the table header with specified content, height, 
+   * and optional border widths.
+   */
   fun createCell(
     content: String?,
     alignment: Int,
@@ -97,7 +113,8 @@ class ReportPdf: PdfGenerator() {
     val currentDate = sdf.format(Date())
 
     val title = "Pdf Title"
-
+    
+    // Calculate number of pages based on data size
     val ITEMS_PER_PAGE = 40
     val remainder = data.items.size % ITEMS_PER_PAGE
     var pages = data.items.size / ITEMS_PER_PAGE
@@ -105,30 +122,32 @@ class ReportPdf: PdfGenerator() {
     if (remainder != 0) {
       pages += 1
     }
+    
+    // Loop through each page and create content
     for (i in 0 until pages) {
       val items =
         if (i == pages - 1 && remainder != 0) data.items.slice(i * ITEMS_PER_PAGE until data.items.size) else data.items.slice(
           i * ITEMS_PER_PAGE until (i + 1) * ITEMS_PER_PAGE
         )
       document.add(
-        createTableHeader(
+        createTableHeader( // creates a header with a title and page number. Implementation not shown
           context, title, null, currentDate, i + 1
         )
       )
       document.add(
-        createResultsTable(
+        createReportDataTable(
           context,
           items
         )
       )
       document.newPage()
     }
-    
+
     document.close()
-    sharePdf(context, file)
+    savePdf(context, file) // Save or share the pdf. Implementation not shown
   }
 
-  fun createResultsTable(context: Context, items: List<ItemReport>): PdfPTable {
+  fun createReportDataTable(context: Context, items: List<ItemReport>): PdfPTable {
     // results table
     val table = PdfPTable(6)
     table.widthPercentage = 100f;
