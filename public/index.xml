@@ -4,7 +4,7 @@
     <title>Victor De Grandis Site</title>
     <link>https://victordgrandis.github.io/blog/</link>
     <description>Recent content on Victor De Grandis Site</description>
-    <generator>Hugo -- 0.126.3</generator>
+    <generator>Hugo -- 0.127.0</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 28 May 2024 13:00:23 -0300</lastBuildDate>
     <atom:link href="https://victordgrandis.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <description>Motivation Tables are a cornerstone of data presentation in mobile apps. Android&amp;rsquo;s RecyclerView makes it easy to create dynamic tables with large datasets. However, exporting this data to a PDF or other file format for sharing can be challenging. This post will address this challenge by showing you how to leverage Kotlin and iText to automate the creation and sharing of reports from your RecyclerView data, ensuring proper formatting for A4 pages.</description>
     </item>
     <item>
-      <title>How to use React Query on Nextjs</title>
+      <title>Mastering React Query in Next.js</title>
       <link>https://victordgrandis.github.io/blog/posts/react-query/</link>
       <pubDate>Mon, 20 May 2024 13:04:27 -0300</pubDate>
       <guid>https://victordgrandis.github.io/blog/posts/react-query/</guid>
@@ -30,15 +30,6 @@ Motivation Fetching data from your backend is one of the most performance killer
       <guid>https://victordgrandis.github.io/blog/posts/hotjar-angular/</guid>
       <description>JavaScript triggers are the most useful feature for using Hotjar HeatMaps in one page applications, because without that you can&amp;rsquo;t create HeatMaps on dynamic content or modals, dropdowns, etc. So i will show you how i made it work on an Angular project. I&amp;rsquo;m making the assumption that you already have an Hotjar account and initialize a project.
 Include Hotjar in your project First we need to include the tracking code in our index.</description>
-    </item>
-    <item>
-      <title>How to parallelize Webpack Loaders</title>
-      <link>https://victordgrandis.github.io/blog/posts/webpack-loaders/</link>
-      <pubDate>Sat, 18 May 2024 16:35:24 -0300</pubDate>
-      <guid>https://victordgrandis.github.io/blog/posts/webpack-loaders/</guid>
-      <description>Runing webpack on a big project can be an agony for developers and can delay the production builds and CI if is not treated properly.
-My aim here is to present how you can parallelize the webpack loaders and reduce the times to just seconds.
-Motivation Working with a very big project built on angularjs (a monolithic with 5+ products inside) and with a custom webpack configuration that managed a lot of different file types, the building time of the app was around 7&amp;rsquo; only for webpack tasks.</description>
     </item>
   </channel>
 </rss>

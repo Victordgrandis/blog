@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>How to use React Query on Nextjs | Victor De Grandis Site</title>
+<title>Mastering React Query in Next.js | Victor De Grandis Site</title>
 <meta name="keywords" content="">
 <meta name="description" content="React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.
 Motivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it&rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it.">
@@ -76,7 +76,7 @@ Motivation Fetching data from your backend is one of the most performance killer
     
   
 
-<meta property="og:title" content="How to use React Query on Nextjs" />
+<meta property="og:title" content="Mastering React Query in Next.js" />
 <meta property="og:description" content="React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.
 Motivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it&rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it." />
 <meta property="og:type" content="article" />
@@ -85,7 +85,7 @@ Motivation Fetching data from your backend is one of the most performance killer
 <meta property="article:modified_time" content="2024-05-20T13:04:27-03:00" /><meta property="og:site_name" content="Victor De Grandis Site" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="How to use React Query on Nextjs"/>
+<meta name="twitter:title" content="Mastering React Query in Next.js"/>
 <meta name="twitter:description" content="React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.
 Motivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it&rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it."/>
 
@@ -104,7 +104,7 @@ Motivation Fetching data from your backend is one of the most performance killer
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "How to use React Query on Nextjs",
+      "name": "Mastering React Query in Next.js",
       "item": "https://victordgrandis.github.io/blog/posts/react-query/"
     }
   ]
@@ -114,14 +114,14 @@ Motivation Fetching data from your backend is one of the most performance killer
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "How to use React Query on Nextjs",
-  "name": "How to use React Query on Nextjs",
+  "headline": "Mastering React Query in Next.js",
+  "name": "Mastering React Query in Next.js",
   "description": "React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.\nMotivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it\u0026rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it.",
   "keywords": [
     
   ],
-  "articleBody": "React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.\nMotivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it’s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it. With react-query, you have a shared source for all components that use that data, with a cache and mutations for updating the state across your application.\nUsage First, you have to configure the provider QueryClientProvider like this:\n// _app.tsx import { QueryClient, QueryClientProvider } from 'react-query'; export default function App({Component, pageProps}) { const queryClientRef = useRef\u003cQueryClient\u003e(); if (!queryClientRef.current) { queryClientRef.current = new QueryClient(); } return ( \u003cReact.Fragment\u003e \u003cHead\u003e ... \u003c/Head\u003e \u003cQueryClientProvider client={queryClientRef.current}\u003e \u003cComponent {...pageProps} /\u003e \u003c/QueryClientProvider\u003e \u003c/React.Fragment\u003e ); } If you don’t know what a provider is, visit the React docs.\nSecondly, you have to make a service, for example at /lib/services/getClientsService.ts\n// /lib/hooks/getClientsService.ts export async function getClients(): Promise\u003cNetworkResponse\u003cClient\u003e\u003e { return axios.get(`/api/clients`).then(response =\u003e response.data); } And finally, a hook for consuming the service and giving react query the retry options:\n// /lib/hooks/useClients.ts export function useClients() { const { data, status } = useQuery\u003cNetworkResponse\u003cClient\u003e, AxiosError\u003e( `/clients`, () =\u003e getClients(), { retry: true, refetchOnWindowFocus: false, refetchOnReconnect: false } ); return { data: data, status }; } Now you’re good to go, using the hook in every component necessary, like so:\nexport default function Clients() { const { clients } = useClients() return ( \u003c\u003e \u003cdiv className=\"flex flex-wrap mt-4\"\u003e \u003cdiv className=\"w-full mb-12 px-4 h-full\"\u003e {clients \u0026\u0026 clients.length \u003e 0 ? ( \u003cClientsTable clients={clients} /\u003e ) : ( \u003cSpinner /\u003e )} \u003c/div\u003e \u003c/div\u003e \u003c/\u003e ); } Conclusion Using react-query is pretty straight forward and simple, and the benefits on performance are considerable, so it’s a very useful tool to have in every React project.\n",
-  "wordCount" : "342",
+  "articleBody": "React query is a tool for creating hooks for fetching, caching and updating asynchronous data repository.\nMotivation Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it’s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it.\nHere are some benefits of using react-query in your react app:\nSimplified Data Fetching: React Query offers a declarative approach, allowing you to define data dependencies using hooks. This eliminates the boilerplate code typically associated with manual data fetching. Automatic Caching: React Query manages in-memory data caching, reducing unnecessary API calls and improving responsiveness. Optimized Refetching: You can configure refetching behavior based on various scenarios, including window focus or network reconnection, ensuring data freshness. Shared State: React Query facilitates the creation of shared state across components, eliminating the need for complex state management solutions for simple data needs. Improved Developer Experience: React Query’s hooks provide a clean and concise syntax, enhancing code readability and maintainability. Usage First, you have to wrap your application component with the QueryClientProvider, passing an instance of QueryClient. This makes the query client accessible throughout your application.:\n// _app.tsx import { QueryClient, QueryClientProvider } from 'react-query'; export default function App({Component, pageProps}) { const queryClientRef = useRef\u003cQueryClient\u003e(); if (!queryClientRef.current) { queryClientRef.current = new QueryClient(); } return ( \u003cReact.Fragment\u003e \u003cHead\u003e ... \u003c/Head\u003e \u003cQueryClientProvider client={queryClientRef.current}\u003e \u003cComponent {...pageProps} /\u003e \u003c/QueryClientProvider\u003e \u003c/React.Fragment\u003e ); } If you don’t know what a provider is, visit the React docs.\nSecondly, you have to make a service, for example at /lib/api/getClients.ts\n// /lib/api/getClients.ts export async function getClients(): Promise\u003cNetworkResponse\u003cClient\u003e\u003e { return axios.get(`/api/clients`).then(response =\u003e response.data); } And finally, a hook for consuming the service and giving react query the retry options:\n// /lib/hooks/useClients.ts export function useClients() { const { data, status } = useQuery\u003cNetworkResponse\u003cClient\u003e, AxiosError\u003e( `/clients`, () =\u003e getClients(), { retry: true, // Optionally enable retries on failures refetchOnWindowFocus: false, refetchOnReconnect: false } ); return { data: data, status }; } Now you’re good to go, using the hook in every component necessary, like so:\nexport default function Clients() { const { clients } = useClients() return ( \u003c\u003e \u003cdiv className=\"flex flex-wrap mt-4\"\u003e \u003cdiv className=\"w-full mb-12 px-4 h-full\"\u003e {clients \u0026\u0026 clients.length \u003e 0 ? ( \u003cClientsTable clients={clients} /\u003e ) : ( \u003cSpinner /\u003e )} \u003c/div\u003e \u003c/div\u003e \u003c/\u003e ); } Something else to mention if you want to use it, React Query also supports managing state updates through mutations and it’s a very helpful and easy to use way to handle states without adding too much boilerplate.\nConclusion Using react-query is pretty straight forward and simple, and the benefits on performance are considerable, so it’s a very useful tool to have in every React project.\n",
+  "wordCount" : "489",
   "inLanguage": "en",
   "datePublished": "2024-05-20T13:04:27-03:00",
   "dateModified": "2024-05-20T13:04:27-03:00",
@@ -190,7 +190,7 @@ Motivation Fetching data from your backend is one of the most performance killer
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      How to use React Query on Nextjs
+      Mastering React Query in Next.js
     </h1>
     <div class="post-meta"><span title='2024-05-20 13:04:27 -0300 -03'>May 20, 2024</span>
 
@@ -198,10 +198,17 @@ Motivation Fetching data from your backend is one of the most performance killer
   </header> 
   <div class="post-content"><p>React query is a tool for creating hooks for fetching, caching and updating asynchronous data <a href="https://github.com/TanStack/query">repository</a>.</p>
 <h3 id="motivation">Motivation<a hidden class="anchor" aria-hidden="true" href="#motivation">#</a></h3>
-<p>Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it&rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it.
-With react-query, you have a shared source for all components that use that data, with a cache and mutations for updating the state across your application.</p>
+<p>Fetching data from your backend is one of the most performance killers features of any frontend, and it really helps to keep a copy of the fetched data in the browser, but it&rsquo;s not always possible, or convenient to build a Redux store, so react-query is a good alternative for managing API results without having to do a lot of work for it, and without having to fetch it again every time you need it.</p>
+<p>Here are some benefits of using react-query in your react app:</p>
+<ul>
+<li>Simplified Data Fetching: React Query offers a declarative approach, allowing you to define data dependencies using hooks. This eliminates the boilerplate code typically associated with manual data fetching.</li>
+<li>Automatic Caching: React Query manages in-memory data caching, reducing unnecessary API calls and improving responsiveness.</li>
+<li>Optimized Refetching: You can configure refetching behavior based on various scenarios, including window focus or network reconnection, ensuring data freshness.</li>
+<li>Shared State: React Query facilitates the creation of shared state across components, eliminating the need for complex state management solutions for simple data needs.</li>
+<li>Improved Developer Experience: React Query&rsquo;s hooks provide a clean and concise syntax, enhancing code readability and maintainability.</li>
+</ul>
 <h3 id="usage">Usage<a hidden class="anchor" aria-hidden="true" href="#usage">#</a></h3>
-<p>First, you have to configure the provider <code>QueryClientProvider</code> like this:</p>
+<p>First, you have to wrap your application component with the <code>QueryClientProvider</code>, passing an instance of <code>QueryClient</code>. This makes the query client accessible throughout your application.:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#75715e">// _app.tsx
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">QueryClient</span>, <span style="color:#a6e22e">QueryClientProvider</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;react-query&#39;</span>;
@@ -225,8 +232,8 @@ With react-query, you have a shared source for all components that use that data
 </span></span><span style="display:flex;"><span>  );
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>If you don&rsquo;t know what a provider is, visit <a href="https://reactjs.org/docs/context.html">the React docs</a>.</p>
-<p>Secondly, you have to make a service, for example at <code>/lib/services/getClientsService.ts</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#75715e">// /lib/hooks/getClientsService.ts
+<p>Secondly, you have to make a service, for example at <code>/lib/api/getClients.ts</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#75715e">// /lib/api/getClients.ts
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getClients</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">Promise</span>&lt;<span style="color:#f92672">NetworkResponse</span><span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#a6e22e">Client</span>&gt;<span style="color:#f92672">&gt;</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">axios</span>.<span style="color:#66d9ef">get</span>(<span style="color:#e6db74">`/api/clients`</span>).<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">response</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">data</span>);
@@ -239,8 +246,8 @@ With react-query, you have a shared source for all components that use that data
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">`/clients`</span>,
 </span></span><span style="display:flex;"><span>    () <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">getClients</span>(),
 </span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">retry</span>: <span style="color:#66d9ef">true</span>,
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">refetchOnWindowFocus</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">retry</span>: <span style="color:#66d9ef">true</span>, <span style="color:#75715e">// Optionally enable retries on failures
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#a6e22e">refetchOnWindowFocus</span>: <span style="color:#66d9ef">false</span>,
 </span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">refetchOnReconnect</span>: <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>  );
@@ -266,7 +273,8 @@ With react-query, you have a shared source for all components that use that data
 </span></span><span style="display:flex;"><span>    &lt;/&gt;
 </span></span><span style="display:flex;"><span>  );
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h3>
+</span></span></code></pre></div><p>Something else to mention if you want to use it, React Query also supports managing state updates through mutations and it&rsquo;s a very helpful and easy to use way to handle states without adding too much boilerplate.</p>
+<h3 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h3>
 <p>Using react-query is pretty straight forward and simple, and the benefits on performance are considerable, so it&rsquo;s a very useful tool to have in every React project.</p>
 
 
