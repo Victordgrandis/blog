@@ -13,9 +13,9 @@
       <link>https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/</link>
       <pubDate>Thu, 27 Jun 2024 17:35:23 -0300</pubDate>
       <guid>https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/</guid>
-      <description>Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.
+      <description>Hi, today I want to show you how to list all the files in a particular folder of a Firebase storage and return them as an array. In this case only the files that are on the top level of that folder, and not the files inside a second folder.
 Dependencies The package is &amp;ldquo;cloud.google.com/go/storage&amp;rdquo;. You can install it using go get cloud.google.com/go/storage
-Why is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step.</description>
+Why is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step, then I took the returned array to delete the files listed over some conditions.</description>
     </item>
     <item>
       <title>Creating Shareable PDF Reports with Kotlin and iText from RecyclerView Data</title>

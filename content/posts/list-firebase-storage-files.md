@@ -4,7 +4,7 @@ date = 2024-06-27T17:35:23-03:00
 draft = false
 +++
 
-Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.
+Hi, today I want to show you how to list all the files in a particular folder of a Firebase storage and return them as an array. In this case only the files that are on the top level of that folder, and not the files inside a second folder.
 
 ### Dependencies
 
@@ -12,7 +12,7 @@ The package is ["cloud.google.com/go/storage"](https://pkg.go.dev/firebase.googl
 
 ### Why is this useful?
 
-I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step. And then I took the returning array to delete over some conditions.
+I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step, then I took the returned array to delete the files listed over some conditions.
 
 But there are lots of situations where you read all the files in a foder, and having the list function on the toolbox may be useful for some of you.
 
@@ -73,15 +73,15 @@ For listing files we are going to use:
 &storage.Query({prefix: "prefix"})
 ```
 
-That you can find on package [docs](https://pkg.go.dev/firebase.google.com/go/storage), although I found very little examples about it.
+This can be found in the [docs](https://pkg.go.dev/firebase.google.com/go/storage) package, although I found very few examples.
 
-Since I wanted only the files that were on the first folder, and not inside a second folder, I will be splitting the name of the file and taking only the ones whose split name array length were equal to 2.
+Since I only wanted the files that were in the top folder, and not in a second folder, I will split the name of the file and take only those whose split name array length was equal to 2.
 
 ### Limitations
 
-As we are using a query that uses a string as prefix for selecting the folder we want to list, we can have the issue of returning more than one folder, since various folder names may fit the filter we are using. 
+Since we are using a query that uses a string as a prefix to select the folder we want to list, we may have the problem of returning more than one folder, as different folder names may match the filter we are using. 
 
-For example, if we have a folder called “1” (that was my case since my folders names were clients IDs), and we use that as a filter, our function may return also the content of the “10” folder. So we have to be careful of filtering manually after.
+For example, if we have a folder called "1" (this was my case, since my folder names were client IDs) and we use that as a filter, our function may also return the contents of folder "10". So we have to be careful to filter manually afterwards.
 
 ### The listing function
 
@@ -128,4 +128,4 @@ func ListFiles(clientId string) []string {
 
 ```
 
-And thats it! thanks for reaching the end.
+And that was it! Hope you found it useful.
