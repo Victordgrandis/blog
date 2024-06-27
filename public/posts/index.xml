@@ -4,10 +4,19 @@
     <title>Posts on Victor De Grandis Site</title>
     <link>https://victordgrandis.github.io/blog/posts/</link>
     <description>Recent content in Posts on Victor De Grandis Site</description>
-    <generator>Hugo -- 0.127.0</generator>
+    <generator>Hugo -- 0.128.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2024 13:00:23 -0300</lastBuildDate>
+    <lastBuildDate>Thu, 27 Jun 2024 17:35:23 -0300</lastBuildDate>
     <atom:link href="https://victordgrandis.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to list Firebase Storage files in Golang</title>
+      <link>https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/</link>
+      <pubDate>Thu, 27 Jun 2024 17:35:23 -0300</pubDate>
+      <guid>https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/</guid>
+      <description>Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.
+Dependencies The package is &amp;ldquo;cloud.google.com/go/storage&amp;rdquo;. You can install it using go get cloud.google.com/go/storage
+Why is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step.</description>
+    </item>
     <item>
       <title>Creating Shareable PDF Reports with Kotlin and iText from RecyclerView Data</title>
       <link>https://victordgrandis.github.io/blog/posts/pdf-kotlin/</link>

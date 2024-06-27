@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>How to list Firebase Storage files in Golang | Victor De Grandis Site</title>
+<meta name="keywords" content="">
+<meta name="description" content="Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.
+Dependencies The package is &ldquo;cloud.google.com/go/storage&rdquo;. You can install it using go get cloud.google.com/go/storage
+Why is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step.">
+<meta name="author" content="">
+<link rel="canonical" href="https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/">
+<link crossorigin="anonymous" href="/blog/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://victordgrandis.github.io/blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://victordgrandis.github.io/blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://victordgrandis.github.io/blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://victordgrandis.github.io/blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://victordgrandis.github.io/blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-G0JRFKHW77"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-G0JRFKHW77');
+        }
+      </script>
+    
+  
+
+<meta property="og:title" content="How to list Firebase Storage files in Golang" />
+<meta property="og:description" content="Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.
+Dependencies The package is &ldquo;cloud.google.com/go/storage&rdquo;. You can install it using go get cloud.google.com/go/storage
+Why is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-06-27T17:35:23-03:00" />
+<meta property="article:modified_time" content="2024-06-27T17:35:23-03:00" /><meta property="og:site_name" content="Victor De Grandis Site" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to list Firebase Storage files in Golang"/>
+<meta name="twitter:description" content="Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.
+Dependencies The package is &ldquo;cloud.google.com/go/storage&rdquo;. You can install it using go get cloud.google.com/go/storage
+Why is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://victordgrandis.github.io/blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "How to list Firebase Storage files in Golang",
+      "item": "https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How to list Firebase Storage files in Golang",
+  "name": "How to list Firebase Storage files in Golang",
+  "description": "Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.\nDependencies The package is \u0026ldquo;cloud.google.com/go/storage\u0026rdquo;. You can install it using go get cloud.google.com/go/storage\nWhy is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.\nDependencies The package is “cloud.google.com/go/storage”. You can install it using go get cloud.google.com/go/storage\nWhy is this useful? I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step. And then I took the returning array to delete over some conditions.\nBut there are lots of situations where you read all the files in a foder, and having the list function on the toolbox may be useful for some of you.\nCode Breakdown First we need to initiate a Bucket object with our Firebase credentials. I called this function GetStorageBucket, and takes from the env variables the keys of my firebase account and returns a Bucket instance.\npackage storage import ( \"context\" \"cloud.google.com/go/storage\" firebase \"firebase.google.com/go\" \"github.com/dirsacorp/scripts/modules/shared\" \"google.golang.org/api/option\" ) func GetStorageBucket() *storage.BucketHandle { err := shared.LoadEnv() if err != nil { panic(err) } storageBucket := shared.GetEnvWithKey(\"STORAGE_BUCKET\") accountKey := shared.GetEnvWithKey(\"ACCOUNT_KEY\") config := \u0026firebase.Config{ StorageBucket: storageBucket, } opt := option.WithCredentialsJSON([]byte(accountKey)) app, err := firebase.NewApp(context.Background(), config, opt) if err != nil { panic(err.Error()) } client, err := app.Storage(context.Background()) if err != nil { panic(err.Error()) } bucket, err := client.DefaultBucket() if err != nil { panic(err.Error()) } return bucket } For listing files we are going to use:\n\u0026storage.Query({prefix: \"prefix\"}) That you can find on package docs, although I found very little examples about it.\nSince I wanted only the files that were on the first folder, and not inside a second folder, I will be splitting the name of the file and taking only the ones whose split name array length were equal to 2.\nLimitations As we are using a query that uses a string as prefix for selecting the folder we want to list, we can have the issue of returning more than one folder, since various folder names may fit the filter we are using.\nFor example, if we have a folder called “1” (that was my case since my folders names were clients IDs), and we use that as a filter, our function may return also the content of the “10” folder. So we have to be careful of filtering manually after.\nThe listing function package storage import ( \"context\" \"log\" \"strings\" \"cloud.google.com/go/storage\" \"google.golang.org/api/iterator\" ) func ListFiles(clientId string) []string { ctx := context.Background() bucket := GetStorageBucket() var files []string query := \u0026storage.Query{Prefix: clientId} iter := bucket.Objects(ctx, query) for { file, err := iter.Next() if err == iterator.Done { break } if err != nil { log.Fatalf(\"error listing files: %s\\n\", err) } splitName := strings.Split(file.Name, \"/\") if len(splitName) == 2 { files = append(files, file.Name) } } return files } And thats it! thanks for reaching the end.\n",
+  "wordCount" : "486",
+  "inLanguage": "en",
+  "datePublished": "2024-06-27T17:35:23-03:00",
+  "dateModified": "2024-06-27T17:35:23-03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://victordgrandis.github.io/blog/posts/list-firebase-storage-files/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Victor De Grandis Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://victordgrandis.github.io/blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://victordgrandis.github.io/blog/" accesskey="h" title="Victor De Grandis Site (Alt + H)">Victor De Grandis Site</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      How to list Firebase Storage files in Golang
+    </h1>
+    <div class="post-meta"><span title='2024-06-27 17:35:23 -0300 -03'>June 27, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Hi, today I want to share with you how I list all the files in certain folder of firebase storage and return them as an array. I this case only the files that are on the top level of that folder, and not the files inside a second folder.</p>
+<h3 id="dependencies">Dependencies<a hidden class="anchor" aria-hidden="true" href="#dependencies">#</a></h3>
+<p>The package is <a href="https://pkg.go.dev/firebase.google.com/go/storage">&ldquo;cloud.google.com/go/storage&rdquo;</a>. You can install it using <code>go get  cloud.google.com/go/storage</code></p>
+<h3 id="why-is-this-useful">Why is this useful?<a hidden class="anchor" aria-hidden="true" href="#why-is-this-useful">#</a></h3>
+<p>I myself had the necessity of cleaning the storage folder of old files left there, so listing them is the first step. And then I took the returning array to delete over some conditions.</p>
+<p>But there are lots of situations where you read all the files in a foder, and having the list function on the toolbox may be useful for some of you.</p>
+<h3 id="code-breakdown">Code Breakdown<a hidden class="anchor" aria-hidden="true" href="#code-breakdown">#</a></h3>
+<p>First we need to initiate a Bucket object with our Firebase credentials. I called this function <code>GetStorageBucket</code>, and takes from the env variables the keys of my firebase account and returns a Bucket instance.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">storage</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;cloud.google.com/go/storage&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">firebase</span> <span style="color:#e6db74">&#34;firebase.google.com/go&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/dirsacorp/scripts/modules/shared&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;google.golang.org/api/option&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">GetStorageBucket</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">storage</span>.<span style="color:#a6e22e">BucketHandle</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">shared</span>.<span style="color:#a6e22e">LoadEnv</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">storageBucket</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">shared</span>.<span style="color:#a6e22e">GetEnvWithKey</span>(<span style="color:#e6db74">&#34;STORAGE_BUCKET&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">accountKey</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">shared</span>.<span style="color:#a6e22e">GetEnvWithKey</span>(<span style="color:#e6db74">&#34;ACCOUNT_KEY&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">config</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">firebase</span>.<span style="color:#a6e22e">Config</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">StorageBucket</span>: <span style="color:#a6e22e">storageBucket</span>,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">opt</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">option</span>.<span style="color:#a6e22e">WithCredentialsJSON</span>([]byte(<span style="color:#a6e22e">accountKey</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">app</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">firebase</span>.<span style="color:#a6e22e">NewApp</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">opt</span>)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">Storage</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">bucket</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">DefaultBucket</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">bucket</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>For listing files we are going to use:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">storage</span>.<span style="color:#a6e22e">Query</span>({<span style="color:#a6e22e">prefix</span>: <span style="color:#e6db74">&#34;prefix&#34;</span>})
+</span></span></code></pre></div><p>That you can find on package <a href="https://pkg.go.dev/firebase.google.com/go/storage">docs</a>, although I found very little examples about it.</p>
+<p>Since I wanted only the files that were on the first folder, and not inside a second folder, I will be splitting the name of the file and taking only the ones whose split name array length were equal to 2.</p>
+<h3 id="limitations">Limitations<a hidden class="anchor" aria-hidden="true" href="#limitations">#</a></h3>
+<p>As we are using a query that uses a string as prefix for selecting the folder we want to list, we can have the issue of returning more than one folder, since various folder names may fit the filter we are using.</p>
+<p>For example, if we have a folder called “1” (that was my case since my folders names were clients IDs), and we use that as a filter, our function may return also the content of the “10” folder. So we have to be careful of filtering manually after.</p>
+<h3 id="the-listing-function">The listing function<a hidden class="anchor" aria-hidden="true" href="#the-listing-function">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">storage</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strings&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;cloud.google.com/go/storage&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;google.golang.org/api/iterator&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ListFiles</span>(<span style="color:#a6e22e">clientId</span> <span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">bucket</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">GetStorageBucket</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">files</span> []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">query</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">storage</span>.<span style="color:#a6e22e">Query</span>{<span style="color:#a6e22e">Prefix</span>: <span style="color:#a6e22e">clientId</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">iter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bucket</span>.<span style="color:#a6e22e">Objects</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">query</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">iter</span>.<span style="color:#a6e22e">Next</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">iterator</span>.<span style="color:#a6e22e">Done</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;error listing files: %s\n&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">splitName</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Name</span>, <span style="color:#e6db74">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">splitName</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">files</span> = append(<span style="color:#a6e22e">files</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Name</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">files</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And thats it! thanks for reaching the end.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="https://victordgrandis.github.io/blog/">Victor De Grandis Site</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
